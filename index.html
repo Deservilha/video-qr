@@ -29,16 +29,32 @@
 
     .container{
       position:relative;
+
+      width:100vw;
+      height:100vh;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      overflow:hidden;
+
+      background:#000;
     }
 
-    /* VIDEO SEM TRATAMENTO */
+    /* VIDEO SEMPRE VERTICAL */
     video{
+
+      height:100vh;
+      width:auto;
+
       max-width:100vw;
-      max-height:100vh;
 
       display:block;
 
       background:#000;
+
+      object-fit:contain;
     }
 
     /* BOTÃO */
