@@ -58,7 +58,7 @@
       display:block;
     }
 
-    /* FORÇAR VERTICAL EM MOBILE */
+    /* MOBILE */
     @media screen and (orientation: landscape){
 
       video{
@@ -85,29 +85,29 @@
     .controls{
       position:absolute;
 
-      bottom:20px;
-      right:20px;
+      bottom:40px;
+      right:25px;
 
       z-index:10;
     }
 
     .sound-btn{
 
-      width:50px;
-      height:50px;
+      width:56px;
+      height:56px;
 
       border:none;
       border-radius:50%;
 
       cursor:pointer;
 
-      background:rgba(255,255,255,0.18);
+      background:rgba(255,255,255,0.16);
 
-      backdrop-filter:blur(10px);
+      backdrop-filter:blur(12px);
 
       color:#fff;
 
-      font-size:20px;
+      font-size:22px;
 
       display:flex;
       align-items:center;
@@ -127,7 +127,7 @@
     }
 
     .sound-on{
-      background:rgba(0, 200, 83, 0.28);
+      background:rgba(0, 200, 83, 0.25);
     }
 
   </style>
@@ -140,7 +140,6 @@
   <!-- VIDEO -->
   <video
     id="video"
-    autoplay
     muted
     loop
     playsinline
@@ -156,9 +155,9 @@
     <button
       class="sound-btn"
       id="soundBtn"
-      onclick="toggleSound()"
+      onclick="startVideo()"
     >
-      🔇
+      ▶
     </button>
   </div>
 
@@ -169,7 +168,7 @@
   const video = document.getElementById('video');
   const soundBtn = document.getElementById('soundBtn');
 
-  // Corrigir alguns navegadores mobile
+  // Corrigir orientação em alguns navegadores
   video.addEventListener('loadedmetadata', () => {
 
     const isVertical = video.videoHeight > video.videoWidth;
@@ -187,13 +186,27 @@
 
   });
 
+  // Iniciar vídeo + ativar som
+  function startVideo(){
+
+    video.muted = false;
+    video.volume = 1;
+
+    video.play();
+
+    soundBtn.innerHTML = '🔊';
+    soundBtn.classList.add('sound-on');
+
+    // Depois do clique, botão vira mute/unmute
+    soundBtn.onclick = toggleSound;
+  }
+
   // Alternar áudio
   function toggleSound(){
 
     if(video.muted){
 
       video.muted = false;
-      video.volume = 1;
 
       soundBtn.innerHTML = '🔊';
       soundBtn.classList.add('sound-on');
@@ -208,17 +221,6 @@
 
     video.play();
   }
-
-  // Garantir autoplay
-  window.addEventListener('load', () => {
-
-    const playPromise = video.play();
-
-    if(playPromise !== undefined){
-      playPromise.catch(() => {});
-    }
-
-  });
 
 </script>
 
