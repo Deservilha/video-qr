@@ -81,20 +81,75 @@
       }
     }
 
-    /* BOTÃO */
+    /* PLAY CENTRAL */
+    .play-wrapper{
+
+      position:absolute;
+
+      inset:0;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      z-index:20;
+    }
+
+    .play-btn{
+
+      width:90px;
+      height:90px;
+
+      border:none;
+      border-radius:50%;
+
+      cursor:pointer;
+
+      background:rgba(255,255,255,0.16);
+
+      backdrop-filter:blur(12px);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      transition:0.25s;
+
+      box-shadow:0 8px 30px rgba(0,0,0,0.35);
+    }
+
+    .play-btn:hover{
+      transform:scale(1.06);
+    }
+
+    .play-btn:active{
+      transform:scale(0.96);
+    }
+
+    .play-icon{
+
+      width:34px;
+      height:34px;
+
+      margin-left:6px;
+
+      fill:white;
+    }
+
+    /* BOTÃO SOM */
     .controls{
       position:absolute;
 
-      bottom:80px;
+      bottom:120px;
       right:25px;
 
-      z-index:10;
+      z-index:30;
     }
 
     .sound-btn{
 
-      width:56px;
-      height:56px;
+      width:54px;
+      height:54px;
 
       border:none;
       border-radius:50%;
@@ -109,7 +164,7 @@
 
       font-size:22px;
 
-      display:flex;
+      display:none;
       align-items:center;
       justify-content:center;
 
@@ -139,25 +194,48 @@
 
   <!-- VIDEO -->
   <video
-  id="video"
-  loop
-  playsinline
-  webkit-playsinline
-  preload="auto"
->
-  <source src="video.mp4" type="video/mp4">
-  Seu navegador não suporta vídeo.
+    id="video"
+    loop
+    playsinline
+    webkit-playsinline
+    preload="auto"
+  >
+    <source src="video.mp4" type="video/mp4">
+    Seu navegador não suporta vídeo.
   </video>
 
-  <!-- BOTÃO -->
+  <!-- PLAY CENTRAL -->
+  <div class="play-wrapper" id="playWrapper">
+
+    <button
+      class="play-btn"
+      id="playBtn"
+      onclick="startVideo()"
+    >
+
+      <!-- ÍCONE PLAY SVG -->
+      <svg
+        class="play-icon"
+        viewBox="0 0 24 24"
+      >
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+
+    </button>
+
+  </div>
+
+  <!-- BOTÃO SOM -->
   <div class="controls">
+
     <button
       class="sound-btn"
       id="soundBtn"
-      onclick="startVideo()"
+      onclick="toggleSound()"
     >
-      ▶
+      🔊
     </button>
+
   </div>
 
 </div>
@@ -166,8 +244,9 @@
 
   const video = document.getElementById('video');
   const soundBtn = document.getElementById('soundBtn');
+  const playWrapper = document.getElementById('playWrapper');
 
-  // Corrigir orientação em alguns navegadores
+  // Corrigir orientação
   video.addEventListener('loadedmetadata', () => {
 
     const isVertical = video.videoHeight > video.videoWidth;
@@ -185,31 +264,32 @@
 
   });
 
-  // PRIMEIRO CLIQUE
+  // INICIAR VÍDEO
   async function startVideo(){
 
     try{
 
-      // força carregamento correto
       video.load();
 
-      // garante áudio
       video.muted = false;
       video.volume = 1;
 
-      // inicia reprodução
       await video.play();
+
+      // remove play central
+      playWrapper.style.display = 'none';
+
+      // mostra botão som
+      soundBtn.style.display = 'flex';
 
       soundBtn.innerHTML = '🔊';
       soundBtn.classList.add('sound-on');
 
-      // muda função do botão
-      soundBtn.onclick = toggleSound;
-
     }catch(error){
 
-      console.log('Erro ao iniciar vídeo:', error);
+      console.log('Erro:', error);
     }
+
   }
 
   // Alternar áudio
@@ -229,10 +309,8 @@
       soundBtn.innerHTML = '🔇';
       soundBtn.classList.remove('sound-on');
     }
-  }
 
-  // botão inicial
-  soundBtn.onclick = startVideo;
+  }
 
 </script>
 
