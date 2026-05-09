@@ -1,4 +1,3 @@
-```html id="z8h4q2"
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -29,17 +28,16 @@
     }
 
     .container{
-
       position:relative;
 
       width:100vw;
       height:100vh;
 
-      overflow:hidden;
-
       display:flex;
       align-items:center;
       justify-content:center;
+
+      overflow:hidden;
 
       background:#000;
     }
@@ -47,15 +45,8 @@
     /* VIDEO */
     video{
 
-      position:absolute;
-
-      top:50%;
-      left:50%;
-
-      transform:translate(-50%, -50%);
-
-      max-width:100%;
-      max-height:100%;
+      max-height:100vh;
+      max-width:100vw;
 
       width:auto;
       height:auto;
@@ -65,6 +56,29 @@
       background:#000;
 
       display:block;
+    }
+
+    /* MOBILE */
+    @media screen and (orientation: landscape){
+
+      video{
+
+        height:90vh;
+        width:auto;
+
+        max-width:calc(90vh * 0.5625);
+      }
+    }
+
+    @media screen and (orientation: portrait){
+
+      video{
+
+        height:100vh;
+        width:auto;
+
+        max-width:100vw;
+      }
     }
 
     /* PLAY CENTRAL */
@@ -83,8 +97,8 @@
 
     .play-btn{
 
-      width:92px;
-      height:92px;
+      width:90px;
+      height:90px;
 
       border:none;
       border-radius:50%;
@@ -114,21 +128,20 @@
 
     .play-icon{
 
-      width:36px;
-      height:36px;
+      width:34px;
+      height:34px;
 
       margin-left:6px;
 
-      fill:#fff;
+      fill:white;
     }
 
     /* BOTÃO SOM */
     .controls{
-
       position:absolute;
 
-      right:25px;
       bottom:120px;
+      right:25px;
 
       z-index:30;
     }
@@ -187,10 +200,7 @@
     webkit-playsinline
     preload="auto"
   >
-    <!-- IMPORTANTE:
-         troque o nome se o Xiaomi cachear -->
-    <source src="video2.mp4" type="video/mp4">
-
+    <source src="video.mp4" type="video/mp4">
     Seu navegador não suporta vídeo.
   </video>
 
@@ -203,7 +213,7 @@
       onclick="startVideo()"
     >
 
-      <!-- PLAY SVG -->
+      <!-- ÍCONE PLAY SVG -->
       <svg
         class="play-icon"
         viewBox="0 0 24 24"
@@ -236,40 +246,25 @@
   const soundBtn = document.getElementById('soundBtn');
   const playWrapper = document.getElementById('playWrapper');
 
-  /* AJUSTAR VIDEO */
-  function ajustarVideo(){
+  // Corrigir orientação
+  video.addEventListener('loadedmetadata', () => {
 
-    const isVertical =
-      video.videoHeight > video.videoWidth;
+    const isVertical = video.videoHeight > video.videoWidth;
 
     if(isVertical){
 
-      video.style.height = '100%';
+      video.style.height = '100vh';
       video.style.width = 'auto';
 
     }else{
 
-      video.style.width = '100%';
+      video.style.width = '100vw';
       video.style.height = 'auto';
     }
-  }
 
-  video.addEventListener(
-    'loadedmetadata',
-    ajustarVideo
-  );
+  });
 
-  window.addEventListener(
-    'resize',
-    ajustarVideo
-  );
-
-  window.addEventListener(
-    'orientationchange',
-    ajustarVideo
-  );
-
-  /* INICIAR VIDEO */
+  // INICIAR VÍDEO
   async function startVideo(){
 
     try{
@@ -281,26 +276,23 @@
 
       await video.play();
 
-      /* remove play central */
+      // remove play central
       playWrapper.style.display = 'none';
 
-      /* mostrar botão som */
+      // mostra botão som
       soundBtn.style.display = 'flex';
 
       soundBtn.innerHTML = '🔊';
-
       soundBtn.classList.add('sound-on');
 
     }catch(error){
 
-      console.log(
-        'Erro ao iniciar vídeo:',
-        error
-      );
+      console.log('Erro:', error);
     }
+
   }
 
-  /* TOGGLE SOM */
+  // Alternar áudio
   function toggleSound(){
 
     if(video.muted){
@@ -308,7 +300,6 @@
       video.muted = false;
 
       soundBtn.innerHTML = '🔊';
-
       soundBtn.classList.add('sound-on');
 
     }else{
@@ -316,13 +307,12 @@
       video.muted = true;
 
       soundBtn.innerHTML = '🔇';
-
       soundBtn.classList.remove('sound-on');
     }
+
   }
 
 </script>
 
 </body>
 </html>
-```
