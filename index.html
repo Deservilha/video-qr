@@ -85,7 +85,7 @@
     .controls{
       position:absolute;
 
-      bottom:40px;
+      bottom:80px;
       right:25px;
 
       z-index:10;
@@ -139,15 +139,14 @@
 
   <!-- VIDEO -->
   <video
-    id="video"
-    muted
-    loop
-    playsinline
-    webkit-playsinline
-    preload="auto"
-  >
-    <source src="video.mp4" type="video/mp4">
-    Seu navegador não suporta vídeo.
+  id="video"
+  loop
+  playsinline
+  webkit-playsinline
+  preload="auto"
+>
+  <source src="video.mp4" type="video/mp4">
+  Seu navegador não suporta vídeo.
   </video>
 
   <!-- BOTÃO -->
@@ -186,19 +185,31 @@
 
   });
 
-  // Iniciar vídeo + ativar som
-  function startVideo(){
+  // PRIMEIRO CLIQUE
+  async function startVideo(){
 
-    video.muted = false;
-    video.volume = 1;
+    try{
 
-    video.play();
+      // força carregamento correto
+      video.load();
 
-    soundBtn.innerHTML = '🔊';
-    soundBtn.classList.add('sound-on');
+      // garante áudio
+      video.muted = false;
+      video.volume = 1;
 
-    // Depois do clique, botão vira mute/unmute
-    soundBtn.onclick = toggleSound;
+      // inicia reprodução
+      await video.play();
+
+      soundBtn.innerHTML = '🔊';
+      soundBtn.classList.add('sound-on');
+
+      // muda função do botão
+      soundBtn.onclick = toggleSound;
+
+    }catch(error){
+
+      console.log('Erro ao iniciar vídeo:', error);
+    }
   }
 
   // Alternar áudio
@@ -218,9 +229,10 @@
       soundBtn.innerHTML = '🔇';
       soundBtn.classList.remove('sound-on');
     }
-
-    video.play();
   }
+
+  // botão inicial
+  soundBtn.onclick = startVideo;
 
 </script>
 
